@@ -1,5 +1,5 @@
 {
-  "name": "Kick Fighter",
+  "name": "kickFighter",
   "version": "0.0.0",
   "description": "multiplayer fighting game",
   "main": "server.js",
@@ -12,7 +12,7 @@
     "url": "git@github.com:kashishgarg/Kick-Fighter.git"
   },
   "dependencies": {
-    "expres": "x",
+    "express": "x",
     "ejs": "x"
   },
   "subdomain": "kickfighter",
