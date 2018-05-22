@@ -2,6 +2,7 @@
     var game = { };
 
     game.jump = function() {
+        console.log("Jumped");
         $.post('/jump');
     };
 
