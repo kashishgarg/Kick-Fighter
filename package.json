@@ -5,18 +5,29 @@
   "main": "server.js",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "./node_modules/.bin/jasmine-node spec"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com:kashishgarg/Kick-Fighter.git"
   },
   "dependencies": {
-    "express": "x",
+    "body-parser": "1.8",
     "ejs": "x",
-    "socket.io": "x"
+    "errorhandler": "*",
+    "express": "x",
+    "express-session": "*",
+    "jasmine-node": "^1.14.5",
+    "method-override": "*",
+    "morgan": "1.3.*",
+    "multer": "0.1.*",
+    "serve-favicon": "2",
+    "socket.io": "x",
+    "underscore": "x"
   },
   "subdomain": "kickfighter",
-  "engines": { "node": "0.10.x"}
-
+  "engines": {
+    "node": "0.10.x"
+  }
 }
