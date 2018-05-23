@@ -1,18 +1,30 @@
 (function() {
     var game = { };
 
-    game.jump = function() {
+    function jump() {
         console.log("Jumped");
         $.post('/jump');
-    };
+    }
 
-    game.attackLeft = function() {
+    function attackLeft() {
         $.post('/left');
-    };
+    }
 
-    game.attackRight = function() {
+    function attackRight() {
         $.post('/right');
-    };
+    }
+
+    function init() {
+        socket = io.connect('/');
+        socket.on('gamestate', function(gamestate) {
+            console.log(gamestate);
+        });
+    }
 
     app.game = game;
+    app.game.init = init;
+    app.game.jump = jump;
+    app.game.attackLeft = attackLeft;
+    app.game.attackRight = attackRight;
+
 })();

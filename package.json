@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "express": "x",
-    "ejs": "x"
+    "ejs": "x",
+    "socket.io": "x"
   },
   "subdomain": "kickfighter",
   "engines": { "node": "0.10.x"}
