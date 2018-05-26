@@ -1,22 +1,26 @@
 (function() {
-    var sprites = app.assets.sprites;
-
+    var game = null;
+    var sprites = null;
     var c, canvas = null;
+    var stageHeight = 450;
 
     function init() {
+        game = app.game;
+        sprites = app.assets.sprites;
         canvas = window.document.getElementById('stage');
-        c = canvas.getContext();
+        c = canvas.getContext('2d');
     }
 
     function draw() {
-        drawPlayer();
+        c.clear(0, 0, canvas.width, canvas.height);
+        drawPlayers();
     }
 
-    function drawPlayer() {
-        var x = 500;
-        var y = 500;
+    function drawPlayers() {
         var sprite = sprites.box;
-        c.draw(sprite, x, y);
+        _.forEach(players, function(player) {
+            c.draw(spries.dive[player.direction][player.state], player.x, player.y + stageHeight);
+        });
     }
 
     app.drawer = { };

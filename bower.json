@@ -1,7 +1,8 @@
 {
-    "name": "kickFighter",
-    "dependencies": {
-        "jquery": "x"
-    },
-    "version": "0.0.0"
+  "name": "kickFighter",
+  "dependencies": {
+    "jquery": "x",
+    "underscore": "^1.9.0"
+  },
+  "version": "0.0.0"
 }

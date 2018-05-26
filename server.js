@@ -4,9 +4,10 @@ var bodyParser = require('body-parser');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
-io.set('loglevel', 0);
+
 var game = require('./lib/game.js');
 
+io.set('loglevel', 0);
 app.set('view engine', 'ejs');
 app.use('/bower_components', express.static('bower_components'));
 app.use('/public', express.static('public'));
@@ -21,13 +22,24 @@ app.post('/jump', function(req, res) {
     res.end();
 });
 
+app.post('/left', function(req, res) {
+    game.left(req.body.playerId);
+    res.end();
+});
+
+app.post('/right', function(req, res) {
+    game.right(req.body.playerId);
+    res.end();
+});
+
 server.listen(process.env.PORT || config.port);
 
-var framesPerSecondInMilliseconds = 1000.0/1.0;
+var fps = game.fps;
+var framesPerSecondInMilliseconds = 1000.0/fps;
 setInterval(function() {
     game.tick();  
     io.sockets.emit('gamestate', { 
-        clock: game.clock(),
+        frame: game.frame(),
         players: game.players() 
     });
 }, framesPerSecondInMilliseconds);

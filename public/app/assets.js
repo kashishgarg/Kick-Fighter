@@ -3,6 +3,21 @@
 
     function init() {
         sprites.box = new Image();
+        sprites.dive = {
+            "1": {
+                jumping: new Image(),
+                standing: new Image()
+            },
+            "-1": {
+                jumping: new Image(),
+                standing: new Image()
+            }
+            
+        };
+        sprites.dive["1"].standing.src = "/public/images/dive-jumping-sprite.png";
+        sprites.dive["1"].jumping.src = "/public/images/dive-standing-sprite.png";
+        sprites.dive["-1"].standing.src = "/public/images/dive-jumping-sprite-inverted.png";
+        sprites.dive["-1"].jumping.src = "/public/images/dive-standing-sprite-inverted.png";
         sprites.box.src = "/public/images/block.png";
     };
 

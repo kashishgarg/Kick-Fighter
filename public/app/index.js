@@ -1,12 +1,12 @@
 (function() {
 
     function init() {
+        app.game.init();
         app.gamePad.init({
             up: app.game.up,
             left: app.game.attackLeft,
             right: app.game.attackRight
         });
-
         app.assets.init();
         app.drawer.init();
         drawLoop();

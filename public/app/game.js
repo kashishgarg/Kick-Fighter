@@ -1,7 +1,8 @@
 (function() {
-    var game = { };
     var socket = null;
     var id = null;
+    var clock = 0;
+    var gamestate = { players: [] };
 
     function jump(id) {
         console.log("Jumped");
@@ -26,15 +27,16 @@
     function init() {
         id = guid();
         socket = io.connect('/');
-        socket.on('gamestate', function(gamestate) {
-            console.log(gamestate);
+        socket.on('gamestate', function(state) {
+            gamestate = state;
         });
     }
 
-    app.game = game;
+    app.game = { };
     app.game.init = init;
     app.game.jump = jump;
     app.game.attackLeft = attackLeft;
     app.game.attackRight = attackRight;
-
+    app.game.clock = function() { return clock; }
+    app.game.players = function() { return gamestate.players; }
 })();

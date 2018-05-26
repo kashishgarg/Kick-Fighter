@@ -1,5 +1,3 @@
-import { NOTINITIALIZED } from "dns";
-
 (function() {
     keyState = {};
     methodMap = {
