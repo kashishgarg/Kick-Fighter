@@ -37,7 +37,7 @@
     app.game.jump = jump;
     app.game.attackLeft = attackLeft;
     app.game.attackRight = attackRight;
-    app.game.clock = function() { return clock; }
-    app.game.players = function() { return gamestate.players; }
-    app.game.boxes = function() { return gamestate.boxes; }
+    app.game.clock = function() { return clock; };
+    app.game.players = function() { return gamestate.players; };
+    app.game.boxes = function() { return gamestate.boxes; };
 })();
