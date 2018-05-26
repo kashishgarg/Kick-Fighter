@@ -40,7 +40,8 @@ setInterval(function() {
     game.tick();  
     io.sockets.emit('gamestate', { 
         frame: game.frame(),
-        players: game.players() 
+        players: game.players(),
+        boxes: game.boxes()
     });
 }, framesPerSecondInMilliseconds);
 
