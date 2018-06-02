@@ -20,8 +20,10 @@
         var sprite = sprites.box;
         _.forEach(players, function(player) {
             // drawHitbox(player);
-            var sprite = spriteFor(player);
-            c.drawImage(sprite.image, sprite.x, sprite.y);
+            if(player.state != "dying") {
+                var sprite = spriteFor(player);
+                c.drawImage(sprite.image, sprite.x, sprite.y);
+            }
             //c.fillRect(player.x, player.y + stageHeight, 10, 10)
         });
     }

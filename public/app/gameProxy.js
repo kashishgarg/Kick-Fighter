@@ -4,16 +4,16 @@
     var clock = 0;
     var gamestate = { players: [] };
 
-    function jump(id) {
+    function up(id) {
         console.log("Jumped");
-        $.post('/jump', { playerId: id });
+        $.post('/up', { playerId: id });
     }
 
-    function attackLeft(id) {
+    function left(id) {
         $.post('/left', { playerId: id });
     }
 
-    function attackRight(id) {
+    function right(id) {
         $.post('/right', { playerId: id });
     }
 
@@ -34,9 +34,9 @@
 
     app.game = { };
     app.game.init = init;
-    app.game.jump = jump;
-    app.game.attackLeft = attackLeft;
-    app.game.attackRight = attackRight;
+    app.game.up = up;
+    app.game.left = left;
+    app.game.right = right;
     app.game.clock = function() { return clock; };
     app.game.players = function() { return gamestate.players; };
     app.game.boxes = function() { return gamestate.boxes; };
