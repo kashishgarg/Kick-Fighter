@@ -20,10 +20,8 @@
         var sprite = sprites.box;
         _.forEach(players, function(player) {
             // drawHitbox(player);
-            if(player.state != "dying") {
                 var sprite = spriteFor(player);
                 c.drawImage(sprite.image, sprite.x, sprite.y);
-            }
             //c.fillRect(player.x, player.y + stageHeight, 10, 10)
         });
     }
@@ -44,8 +42,10 @@
     }
 
     function spriteFor(player) {
+        var state = player.state;
+        if(state == "dying") state = player.deathState;
         return {
-            image: sprites.dive[player.direction][player.state],
+            image: sprites.dive[player.direction][state],
             x: player.x - game.boxes().playerCenter,
             y: player.y + stageHeight - game.boxes().playerHeight
         }

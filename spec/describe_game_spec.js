@@ -66,4 +66,18 @@ describe("stageBoundaries", function() {
         expect(player.state).toBe("kicking"); //dying
         expect(game.players.length).toBe(0);
     });
+
+    it("player is removed after the death countdown", function() {
+        var player = game.addPlayer("player1");
+        player.state = "kicking";
+        player.direction = -1;
+        player.x = 0;
+        player.y = -1000;
+        game.tick();
+        var countdown = player.deathCountdown;
+        for(i = 0; i < countdown; i++) {
+            game.tick();
+        }
+        expect(game.players().length).toBe(0);
+    });
 });
