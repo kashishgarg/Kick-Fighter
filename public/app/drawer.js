@@ -20,8 +20,8 @@
     }
 
     function drawPlayers() {
-        var sprite = sprites.box;
-        _.forEach(players, function(player) {
+        console.log(game.players());
+        _.each(players, function(player) {
             // drawHitbox(player);
                 var sprite = spriteFor(player);
                 if(sprite.image.toString() == "[object ImageData]") {

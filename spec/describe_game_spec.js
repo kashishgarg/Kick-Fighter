@@ -46,7 +46,6 @@ describe("stageBoundaries", function() {
         player.y = -1000;
         player.x = 200;
         ticksTillBorder = (player.x - game.stageBoundary.left) / game.kickDelta;
-        console.log(ticksTillBorder);
         for(i = 0; i < game.kickDelta; i++) {
             game.tick();
         }
@@ -79,5 +78,26 @@ describe("stageBoundaries", function() {
             game.tick();
         }
         expect(game.players().length).toBe(0);
+    });
+});
+
+describe("hit boxes", function() {
+    it("kills player", function() {
+        var attacker = game.addPlayer("attacker");
+        attacker.state = "kicking";
+        attacker.direction = -1;
+        attacker.x = 500;
+        attacker.y = -100;
+
+        var victim = game.addPlayer("victim");
+        victim.x = 450;
+        victim.y = 0;
+        victim.direction = 1;
+        victim.state = "standing";
+        // var foot = attacker.foot(game.boxes());
+        // var bodyParts = victim.boxes(game.boxes());
+        game.tick();
+        expect(victim.state).toBe('dying');
+        expect(attacker.state).toBe('kicking');
     });
 });
