@@ -1,20 +1,23 @@
 (function() {
     var socket = null;
-    var id = null;
+    var playerId = null;
     var clock = 0;
     var gamestate = { players: [] };
 
-    function up(id) {
-        console.log("Jumped");
-        $.post('/up', { playerId: id });
+    function up(playerId) {
+        $.post('/up', { playerId: playerId });
     }
 
-    function left(id) {
-        $.post('/left', { playerId: id });
+    function left(playerId) {
+        $.post('/left', { playerId: playerId });
     }
 
-    function right(id) {
-        $.post('/right', { playerId: id });
+    function right(playerId) {
+        $.post('/right', { playerId: playerId });
+    }
+
+    function down(playerId) {
+        $.post('/down', { playerId: playerId });
     }
 
     function guid() {
@@ -25,7 +28,7 @@
 }	   
 
     function init() {
-        id = guid();
+        playerId = guid();
         socket = io.connect('/');
         socket.on('gamestate', function(state) {
             gamestate = state;
@@ -33,10 +36,12 @@
     }
 
     app.game = { };
+    app.game.playerId = function() { return playerId; };
     app.game.init = init;
     app.game.up = up;
     app.game.left = left;
     app.game.right = right;
+    app.game.down = down;
     app.game.clock = function() { return clock; };
     app.game.players = function() { return gamestate.players; };
     app.game.boxes = function() { return gamestate.boxes; };

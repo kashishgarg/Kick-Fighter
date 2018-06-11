@@ -20,7 +20,7 @@ describe("jumping", function() {
         game.addPlayer("player1");
         game.getPlayer("player1").state = "standing";
         game.up("player1");
-        expect(game.getPlayer("player1").velocity).toBe(game.jumpPower);
+        expect(game.getPlayer("player1").velocityY).toBe(game.jumpPower);
     });
 
     it("player's y position should change after jump", function() {

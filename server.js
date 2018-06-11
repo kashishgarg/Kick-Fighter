@@ -32,6 +32,11 @@ app.post('/right', function(req, res) {
     res.end();
 });
 
+app.post('/down', function() {
+    game.down(req.body.playerId);
+    res.end();
+});
+
 server.listen(process.env.PORT || config.port);
 
 var fps = game.fps;
