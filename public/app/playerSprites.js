@@ -1,6 +1,12 @@
 (function() {
     var stageHeight = 500;
     var maxDeathCountdown = 40.0;
+    var stage;
+    var sprites = { };
+
+    function init() {
+        var stage = app.drawer.stage();
+    }
 
     function playerTexture(playerId) {
         var player = app.game.getPlayer(playerId)
@@ -12,7 +18,19 @@
         return player.state;
     }
 
-    class PlayerSprite {
+    function add(player) {
+        if(sprites[player.id]) return;
+        var playerSprite = new PlayerSprites(player.id);
+        sprites[player.id] = playerSprite;
+        stage.addChild(playerSprite.sprite);
+    }
+
+    function tick(players) {
+        _.each(players, app.playerSprites.add);
+        _.each(sprites, function(sprite) { sprite.tick(); });
+    }
+
+    class PlayerSprites {
         constructor(playerId) {
             this.id = playerId;
             this.sprite = new PIXI.sprite(playerTexture(this.id));
@@ -21,7 +39,7 @@
             this.deathCountdown = null;
             this.dead = false;
             
-            this.draw = function () {
+            this.tick = function () {
                 var player = app.game.getPlayer(this.id);
                 this.sprite.alpha = 0;
                 if (!player) return;
@@ -43,5 +61,8 @@
         }
     }
 
-    app.PlayerSprite = PlayerSprite;
+    app.playerSprites = { };
+    app.playerSprites.init = init;
+    app.playerSprites.tick = tick;
+    app.playerSprites.add = add;
 })();

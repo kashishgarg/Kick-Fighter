@@ -9,9 +9,10 @@
             down: app.game.down
         });
         app.assets.init();
-        app.deathAnimation.init();
+        // app.deathAnimations.init();
         app.drawer.init();
         app.ai.init();
+        app.drawer.startDrawing();
     }
     $(init);
 })();

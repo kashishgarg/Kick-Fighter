@@ -12,14 +12,17 @@
     }
 
     function startDrawing() {
-        requestAnimFrame(draw);
+        requestAnimationFrame(draw);
+        setInterval(calc, 17);
+    }
+
+    function calc() {
+        app.playerSprites.tick(game.players());
+        app.deathAnimations.tick();
     }
 
     function draw() {
-        requestAnimFrame(draw);
-        _.each(game.players(), function(player) { addPlayerSprite(player.id) });
-        _.each(sprites, function(sprite) { sprite.draw(); })
-        app.deathAnimations.draw();
+        requestAnimationFrame(draw);
         renderer.render(stage);
     }
 
@@ -43,5 +46,5 @@
     app.drawer = { };
     app.drawer.init = init;
     app.drawer.startDrawing = startDrawing;
-    app.stage = function() { return stage; };
+    app.drawer.stage = function() { return stage; };
 })();
