@@ -23,21 +23,25 @@ app.get('/ai', function(req, res) {
 
 app.post('/up', function(req, res) {
     game.up(req.body.playerId);
+    setBroadcast();
     res.end();
 });
 
 app.post('/left', function(req, res) {
     game.left(req.body.playerId);
+    setBroadcast();
     res.end();
 });
 
 app.post('/right', function(req, res) {
     game.right(req.body.playerId);
+    setBroadcast();
     res.end();
 });
 
 app.post('/down', function() {
     game.down(req.body.playerId);
+    setBroadcast();
     res.end();
 });
 
@@ -45,12 +49,26 @@ server.listen(process.env.PORT || config.port);
 
 var fps = game.fps;
 var framesPerSecondInMilliseconds = 1000.0/fps;
+var shouldBroadcast = false;
+
+function setBroadcast() {
+    shouldBroadcast = true;
+}
+
+function broadcast() {
+    if(shouldBroadcast) {
+        io.sockets.emit('gamestate', { 
+            frame: game.frame(),
+            players: game.players(),
+            boxes: game.boxes(),
+        });
+    shouldBroadcast = false;
+    }
+}
+
 setInterval(function() {
-    game.tick();  
-    io.sockets.emit('gamestate', { 
-        frame: game.frame(),
-        players: game.players(),
-        boxes: game.boxes(),
-    });
+    var deathsOccured = game.tick();  
+    if(deathsOccured) setBroadcast();
+    broadcast();
 }, framesPerSecondInMilliseconds);
 

@@ -22,8 +22,8 @@
     }
 
     function draw() {
-        requestAnimationFrame(draw);
         renderer.render(stage);
+        requestAnimationFrame(draw);
     }
 
     function playerState(player) {
