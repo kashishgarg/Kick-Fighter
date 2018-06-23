@@ -2,8 +2,6 @@
     var socket = null;
     var playerId = null;
     var clock = 0;
-    var gravity = 1;
-    var kickDelta = 10;
     var gamestate = { players: [] };
 
     function up(playerId) {
@@ -34,24 +32,7 @@
     }
 
     function applyGravity() {
-        _.each(app.game.players(), function(player) {
-            if(player.state == 'dying') return;
-            if(player.state == 'jumping') {
-                player.y -= player.velocityY;
-                player.x -= player.velocityX;
-                player.velocityY -= gravity;
-            }
-    
-            if(player.state == 'kicking') {
-                player.y += kickDelta;
-                player.x += kickDelta * player.direction;
-            }
-    
-            if(player.y > 0) {
-                player.state = "standing";
-                player.y = 0;
-            }
-        });       
+        _.each(app.game.players(), app.gravity.tick);       
     }
 
     function init() {

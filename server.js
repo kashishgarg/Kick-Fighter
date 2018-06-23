@@ -10,6 +10,7 @@ var game = require('./lib/game.js');
 io.set('loglevel', 0);
 app.set('view engine', 'ejs');
 app.use('/bower_components', express.static('bower_components'));
+app.use('/common', express.static('common'));
 app.use('/public', express.static('public'));
 app.use(bodyParser.json());
 
@@ -49,7 +50,7 @@ server.listen(process.env.PORT || config.port);
 
 var fps = game.fps;
 var framesPerSecondInMilliseconds = 1000.0/fps;
-var shouldBroadcast = false;
+var shouldBroadcast = true;
 
 function setBroadcast() {
     shouldBroadcast = true;
