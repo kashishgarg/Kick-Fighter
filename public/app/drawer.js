@@ -3,15 +3,19 @@
     var sprites = { };
     var stage, renderer = null;
     var stageHeight = 500;
+    var maxWidth = 1280;
+    var maxHeight = 500;
         
     function init() {
         stage = new PIXI.Stage(0xFFFFFF);
+        $(window).resize(onResize);
         renderer = PIXI.autoDetectRenderer(1280, 500);
         $('stage').append(renderer.view);
         game = app.game;
     }
 
     function startDrawing() {
+        onResize();
         requestAnimationFrame(draw);
         setInterval(calc, 17);
     }
@@ -41,6 +45,16 @@
 
     function playerTexture(player) {
         return app.assets.sprites.dive[player.direction][player.state];
+    }
+
+    function onResize() {
+        var width = $('canvas').width();
+        var height = width / maxWidth * maxHeight;
+        if(width < maxWidth) {
+            $('canvas').css({ height: height, width: width });
+        } else {
+            $('canvas').css({ height: maxHeight, width: maxWidth });
+        }
     }
 
     app.drawer = { };
