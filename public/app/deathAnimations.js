@@ -11,8 +11,8 @@
         var results = [];
         var width = texture.frame.width;
         var height = texture.frame.height;
-        var rows = 10;
-        var columns = 10;
+        var rows = 15;
+        var columns = 15;
         var deltaX = width / rows;
         var deltaY = height / columns;
         _.times(rows, function(row) {
@@ -50,10 +50,19 @@
         _.each(deathQueue, function(death) {
             _.each(death.pieces, function(piece) {
                 piece.sprite.alpha = deathCountDown / maxDeathCountdown;
-                piece.sprite.position.x += piece.dx;
-                piece.sprite.position.y += piece.dy;
+                var dx = piece.dx;
+                var dy = piece.dy;
+                var roatation = piece.rotation;
+                var tickCount = maxDeathCountdown - deathCountDown;
+                if( tickCount < 25 && tickCount > 5) {
+                    rotation = rotation / 10;
+                    dx = dx / 10;
+                    dy = dy / 10;
+                }
+                piece.sprite.position.x += dx;
+                piece.sprite.position.y += dy;
                 piece.dy += gravity;
-                piece.sprite.rotation = piece.rotation;
+                piece.sprite.rotation = rotation;
             })
             death.deathCountDown -= 1;
             death.sprite.alpha = death.deathCountDown / maxDeathCountdown;
