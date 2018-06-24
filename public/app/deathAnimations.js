@@ -1,8 +1,8 @@
 (function() {
     var deathQueue = [];
-    var maxDeathCountdown = 60;
+    var maxDeathCountdown = 150;
     var stage;
-    var gravity = 1.0;
+    var gravity = 0.2;
     function init() {
         stage = app.drawer.stage();
     }
@@ -11,8 +11,8 @@
         var results = [];
         var width = texture.frame.width;
         var height = texture.frame.height;
-        var rows = 15;
-        var columns = 15;
+        var rows = 10;
+        var columns = 10;
         var deltaX = width / rows;
         var deltaY = height / columns;
         _.times(rows, function(row) {
