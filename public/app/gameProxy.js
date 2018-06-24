@@ -3,21 +3,26 @@
     var playerId = null;
     var clock = 0;
     var gamestate = { players: [] };
+    var gameId = _.last(window.location.href.split('/'));   
 
     function up(playerId) {
-        $.post('/up', { playerId: playerId });
+        $.post('/up', dto());
     }
 
     function left(playerId) {
-        $.post('/left', { playerId: playerId });
+        $.post('/left', dto());
     }
 
     function right(playerId) {
-        $.post('/right', { playerId: playerId });
+        $.post('/right', dto());
     }
 
     function down(playerId) {
-        $.post('/down', { playerId: playerId });
+        $.post('/down', dto());
+    }
+
+    function dto() {
+        return { playerId: playerId, gameId: gameId };
     }
 
     function guid() {
@@ -38,11 +43,15 @@
     function init() {
         playerId = guid();
         socket = io.connect('/');
+        socket.on('connect', function() {
+            socket.emit('joinGame', dto());
+        })
         socket.on('gamestate', function(state) {
             gamestate = state;
             applyGravity();
         });
         setInterval(applyGravity, 1000.0 / 60.0);
+        console.log(dto());
     }
 
     app.game = { };

@@ -1,11 +1,39 @@
+var _ = require('underscore');
 var express = require('express');
 var config = require('./config.js').config;
 var bodyParser = require('body-parser');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
+var engine = require('./lib/engine.js');
+var Game = require('./lib/game.js').Game;
+var games = { };
 
-var game = require('./lib/game.js');
+function setBroadcast(game) {
+    game.shouldBroadcast = true;
+}
+
+function broadcast(game) {
+    if(game.shouldBroadcast) {
+        _.each(game.sockets, function(socket) {
+            socket.emit('gamestate', {
+                frame: engine.frame(),
+                players: engine.players(game),
+                boxes: engine.boxes()
+            });
+        });
+        game.shouldBroadcast = false; 
+    }
+}
+
+function getGame(gameId) {
+    if(!games[gameId]) {
+        games[gameId] = new Game();
+        games[gameId].id = gameId;
+        games[gameId].shouldBroadcast = true;
+    }
+    return games[gameId];
+}
 
 io.set('loglevel', 0);
 app.set('view engine', 'ejs');
@@ -15,61 +43,59 @@ app.use('/public', express.static('public'));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) { 
-    res.render('index', { ai: false }); 
+    res.redirect('/game/public'); 
 });
 
-app.get('/ai', function(req, res) {
-    res.render('index', { ai: true });
-})
-
 app.post('/up', function(req, res) {
-    game.up(req.body.playerId);
-    setBroadcast();
+    var game = getGame(req.body.gameId);
+    engine.up(game, req.body.playerId);
+    setBroadcast(game);
     res.end();
 });
 
 app.post('/left', function(req, res) {
-    game.left(req.body.playerId);
-    setBroadcast();
+    var game = getGame(req.body.gameId);
+    engine.left(game, req.body.playerId);
+    setBroadcast(game);
     res.end();
 });
 
 app.post('/right', function(req, res) {
-    game.right(req.body.playerId);
-    setBroadcast();
+    var game = getGame(req.body.gameId);
+    engine.right(game, req.body.playerId);
+    setBroadcast(game);
     res.end();
 });
 
-app.post('/down', function() {
-    game.down(req.body.playerId);
-    setBroadcast();
+app.post('/down', function(req, res) {
+    var game = getGame(req.body.gameId);
+    engine.down(game, req.body.playerId);
+    setBroadcast(game);
     res.end();
 });
+
+app.get("/game/:id", function(req, res) {
+    getGame(req.params.id);
+    res.render('index', { ai: false });
+})
 
 server.listen(process.env.PORT || config.port);
 
-var fps = game.fps;
+var fps = engine.fps;
 var framesPerSecondInMilliseconds = 1000.0/fps;
 var shouldBroadcast = true;
-
-function setBroadcast() {
-    shouldBroadcast = true;
-}
-
-function broadcast() {
-    if(shouldBroadcast) {
-        io.sockets.emit('gamestate', { 
-            frame: game.frame(),
-            players: game.players(),
-            boxes: game.boxes(),
-        });
-    shouldBroadcast = false;
-    }
-}
+io.sockets.on('connection', function(socket) {
+    socket.on('joinGame', function(data) {
+        getGame(data.gameId).sockets.push(socket);
+    });
+});
 
 setInterval(function() {
-    var deathsOccured = game.tick();  
-    if(deathsOccured) setBroadcast();
-    broadcast();
+    for(var key in games) {
+            var game = games[key];
+            var deathsOccured = engine.tick(game);
+            if(deathsOccured) { setBroadcast(game); }
+            broadcast(game);
+    }
 }, framesPerSecondInMilliseconds);
 
