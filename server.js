@@ -47,30 +47,22 @@ app.get('/', function(req, res) {
 });
 
 app.post('/up', function(req, res) {
-    var game = getGame(req.body.gameId);
-    engine.up(game, req.body.playerId);
-    setBroadcast(game);
+    input("up", req.body.gameId, req.body.playerId);
     res.end();
 });
 
 app.post('/left', function(req, res) {
-    var game = getGame(req.body.gameId);
-    engine.left(game, req.body.playerId);
-    setBroadcast(game);
+    input("left", req.body.gameId, req.body.playerId);
     res.end();
 });
 
 app.post('/right', function(req, res) {
-    var game = getGame(req.body.gameId);
-    engine.right(game, req.body.playerId);
-    setBroadcast(game);
+    input("right", req.body.gameId, req.body.playerId);
     res.end();
 });
 
 app.post('/down', function(req, res) {
-    var game = getGame(req.body.gameId);
-    engine.down(game, req.body.playerId);
-    setBroadcast(game);
+    input("down", req.body.gameId, req.body.playerId);
     res.end();
 });
 
@@ -84,11 +76,30 @@ server.listen(process.env.PORT || config.port);
 var fps = engine.fps;
 var framesPerSecondInMilliseconds = 1000.0/fps;
 var shouldBroadcast = true;
+
+function input(direction, gameId, playerId) {
+    var game = getGame(gameId);
+    engine[direction](game, playerId);
+    setBroadcast(game);
+}
+
 io.sockets.on('connection', function(socket) {
     socket.on('joinGame', function(data) {
         var game = getGame(data.gameId);
         game.sockets.push(socket);
         setBroadcast(game);
+    });
+    socket.on('up', function(data) {
+        input("up", data.gameId, data.playerId)
+    });
+    socket.on('down', function(data) {
+        input("down", data.gameId, data.playerId)
+    });
+    socket.on('left', function(data) {
+        input("left", data.gameId, data.playerId)
+    });
+    socket.on('right', function(data) {
+        input("right", data.gameId, data.playerId)
     });
 });
 
