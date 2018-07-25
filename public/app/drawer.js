@@ -8,8 +8,8 @@
         
     function init() {
         stage = new PIXI.Stage(0xFFFFFF);
-        $(window).resize(onResize);
         renderer = PIXI.autoDetectRenderer(1280, 500);
+        $(window).resize(onResize);
         $('stage').append(renderer.view);
         game = app.game;
     }

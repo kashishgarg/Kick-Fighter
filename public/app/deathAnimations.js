@@ -1,6 +1,6 @@
 (function() {
     var deathQueue = [];
-    var maxDeathCountdown = 150;
+    var maxDeathCountdown = 100;
     var stage;
     var gravity = 0.2;
     function init() {
@@ -11,8 +11,8 @@
         var results = [];
         var width = texture.frame.width;
         var height = texture.frame.height;
-        var rows = 15;
-        var columns = 15;
+        var rows = 20;
+        var columns = 10;
         var deltaX = width / rows;
         var deltaY = height / columns;
         _.times(rows, function(row) {
@@ -21,13 +21,15 @@
                 var spriteY = row * deltaY;
                 var sprite = new PIXI.Sprite(new PIXI.Texture(texture, { x: spriteX, y: spriteY, width: deltaX, height: deltaY }));
                 sprite.anchor.x = 0.5;  
-                sprite.anchor.y = 1;
+                sprite.anchor.y = 0.5;
                 sprite.position.x = x + (width * sprite.anchor.x) - (deltaX * (rows - (row + 1)));
                 sprite.position.y = y - (deltaY * (columns - (column + 1)));
                 results.push({
                     sprite: sprite,
                     dy: _.random(-20, 0),
                     dx: _.random(-10, 10),
+                    scale: Math.random() * 0.05,
+                    scaleDirection: Math.random() > 0.5 ? -1 : 1,
                     rotation: Math.random() / 2
                 })
             });
@@ -52,6 +54,7 @@
                 piece.sprite.alpha = deathCountDown / maxDeathCountdown;
                 var dx = piece.dx;
                 var dy = piece.dy;
+                var scale = piece.scale * piece.scaleDirection;
                 var roatation = piece.rotation;
                 var tickCount = maxDeathCountdown - deathCountDown;
                 if( tickCount < 25 && tickCount > 5) {
@@ -61,6 +64,8 @@
                 }
                 piece.sprite.position.x += dx;
                 piece.sprite.position.y += dy;
+                piece.scale.x += scale;
+                piece.scale.y += scale;
                 piece.dy += gravity;
                 piece.sprite.rotation = rotation;
             })
