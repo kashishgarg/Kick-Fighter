@@ -7,6 +7,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var engine = require('./lib/engine.js');
 var Game = require('./lib/game.js').Game;
+var bot = require('./lib/bot.js');
 var games = { };
 
 function setBroadcast(game) {
@@ -86,6 +87,7 @@ function input(direction, gameId, playerId) {
 io.sockets.on('connection', function(socket) {
     socket.on('joinGame', function(data) {
         var game = getGame(data.gameId);
+        socket.game = game;
         game.sockets.push(socket);
         setBroadcast(game);
     });
@@ -101,11 +103,19 @@ io.sockets.on('connection', function(socket) {
     socket.on('right', function(data) {
         input("right", data.gameId, data.playerId)
     });
+
+    socket.on('disconnect', function() {
+        if(!socket.game) return;
+        socket.game.sockets  = _.without(scoket.game.sockets, socket);
+    });
 });
 
 setInterval(function() {
     for(var key in games) {
             var game = games[key];
+            var botAdded = bot.add(game);
+            var actionMade = bot.tick(game);
+            if(botAdded || actionMade) { setBroadcast(game); }
             var deathsOccured = engine.tick(game);
             if(deathsOccured) { setBroadcast(game); }
             broadcast(game);
